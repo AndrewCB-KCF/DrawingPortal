@@ -1,7 +1,7 @@
 import sqlite3
 import pandas as pd
 
-DB_PATH = "C:\\Users\\andrew.breier\\Documents\\DatabaseBackups\\SMARTDrawings Database-KCF-4DPWP74 - Copy.db"
+DB_PATH = "SMARTDrawings Database-KCF-4DPWP74 - Copy.db"
 
 
 def get_connection():
