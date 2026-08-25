@@ -116,24 +116,6 @@ gb.configure_selection(
 
 grid_options = gb.build()
 
-gb.configure_column(
-    "Drawing Number",
-    cellRenderer="""
-    class UrlCellRenderer {
-        init(params) {
-            this.eGui = document.createElement('a');
-            this.eGui.innerText = params.value;
-            this.eGui.setAttribute('href', params.data['File Path']);
-            this.eGui.setAttribute('target', '_blank');
-        }
-
-        getGui() {
-            return this.eGui;
-        }
-    }
-    """
-)
-
 grid_response = AgGrid(
     grid_df,
     gridOptions=grid_options,
