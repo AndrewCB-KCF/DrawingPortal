@@ -164,8 +164,10 @@ if selected_rows is not None and len(selected_rows) > 0:
     
         if record["file_path"]:
         
-            st.success("Current Revision")
-        
+            st.success(
+                f"Current Revision: {record['revision']}"
+            )
+            
             st.link_button(
                 f"📂 Open Revision {record['revision']}",
                 record["file_path"],
