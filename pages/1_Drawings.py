@@ -230,7 +230,7 @@ if selected_rows is not None and len(selected_rows) > 0:
                 "💾 Save Changes"
             )
 
-        if st.button("💾 Save Changes"):
+        if submitted:
     
             conn = get_connection()
             cursor = conn.cursor()
