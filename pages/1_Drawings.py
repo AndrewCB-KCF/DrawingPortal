@@ -103,11 +103,11 @@ grid_df.columns = [
 
 grid_df["Open"] = grid_df["File Path"]
 
-open_link = JsCode("""
-function(params) {
-    return '<a href="' + params.value     '📂 Open</a>';
-}
-""")
+# open_link = JsCode("""
+# function(params) {
+#     return '<a href="' + params.value     '📂 Open</a>';
+# }
+# """)
 
 gb = GridOptionsBuilder.from_dataframe(grid_df)
 
