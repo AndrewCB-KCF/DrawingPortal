@@ -2,10 +2,39 @@ import streamlit as st
 from st_aggrid import AgGrid, GridOptionsBuilder
 from st_aggrid import GridUpdateMode
 from utils import get_certifications
+import pandas as pd
 
 st.title("🎓 Certifications")
 
-df = get_certifications()
+#df = get_certifications()
+
+
+
+df = pd.read_excel(
+    "data/certifications.xlsx"
+)
+
+df = df[
+    [
+        "Product Name",
+        "Certification Type",
+        "Report Number",
+        "Standard Tested",
+        "Country",
+        "Issue Date",
+        "Status"
+    ]
+]
+
+df.columns = [
+    "product_name",
+    "certification_type",
+    "report_number",
+    "standard_tested",
+    "country",
+    "issue_date",
+    "status"
+]
 
 df["project"] = (
     df["product_name"]
