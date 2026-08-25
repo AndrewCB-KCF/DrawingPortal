@@ -1,0 +1,264 @@
+import streamlit as st
+from st_aggrid import AgGrid, GridOptionsBuilder
+
+from utils import get_certifications
+
+st.title("🎓 Certifications")
+
+df = get_certifications()
+
+# Search
+
+search = st.text_input(
+    "🔍 Search Certifications"
+)
+
+if search:
+
+    df = df[
+        (
+            df["product_name"]
+            .astype(str)
+            .str.contains(
+                search,
+                case=False,
+                na=False
+            )
+        )
+        |
+        (
+            df["report_number"]
+            .astype(str)
+            .str.contains(
+                search,
+                case=False,
+                na=False
+            )
+        )
+        |
+        (
+            df["certification_type"]
+            .astype(str)
+            .str.contains(
+                search,
+                case=False,
+                na=False
+            )
+        )
+    ]
+
+# Status Filter
+
+status_filter = st.selectbox(
+    "Status",
+    [
+        "All"
+    ]
+    +
+    sorted(
+        df["status"]
+        .dropna()
+        .unique()
+    )
+)
+
+if status_filter != "All":
+
+    df = df[
+        df["status"]
+        == status_filter
+    ]
+
+# Metrics
+
+col1, col2, col3 = st.columns(3)
+
+with col1:
+
+    st.metric(
+        "Products",
+        len(df)
+    )
+
+with col2:
+
+    st.metric(
+        "Countries",
+        df["country"].nunique()
+    )
+
+with col3:
+
+    st.metric(
+        "Certification Types",
+        df["certification_type"].nunique()
+    )
+
+# Grid
+
+grid_df = df.copy()
+
+grid_df = grid_df[
+    [
+        "product_name",
+        "certification_type",
+        "report_number",
+        "standard_tested",
+        "country",
+        "issue_date",
+        "status"
+    ]
+]
+
+grid_df.columns = [
+    "Product Name",
+    "Certification Type",
+    "Report Number",
+    "Standard Tested",
+    "Country",
+    "Issue Date",
+    "Status"
+]
+
+gb = GridOptionsBuilder.from_dataframe(
+    grid_df
+)
+
+gb.configure_default_column(
+    sortable=True,
+    filter=True,
+    resizable=True
+)
+
+gb.configure_selection(
+    selection_mode="single",
+    use_checkbox=False
+)
+
+grid_options = gb.build()
+
+grid_response = AgGrid(
+    grid_df,
+    gridOptions=grid_options,
+    height=400,
+    fit_columns_on_grid_load=True
+)
+
+selected_rows = grid_response.get(
+    "selected_rows"
+)
+
+if (
+    selected_rows is not None
+    and
+    len(selected_rows) > 0
+):
+
+    product_name = selected_rows.iloc[0][
+        "Product Name"
+    ]
+
+    record = df[
+        df["product_name"]
+        == product_name
+    ].iloc[0]
+
+    details_tab, properties_tab = st.tabs(
+        [
+            "Details",
+            "Properties"
+        ]
+    )
+
+    with details_tab:
+
+        st.subheader(
+            record["product_name"]
+        )
+
+        st.write(
+            f"Certification Type: {record['certification_type']}"
+        )
+
+        st.write(
+            f"Report Number: {record['report_number']}"
+        )
+
+        st.write(
+            f"Standard Tested: {record['standard_tested']}"
+        )
+
+        st.write(
+            f"Country: {record['country']}"
+        )
+
+        st.write(
+            f"Issue Date: {record['issue_date']}"
+        )
+
+        status = record["status"]
+
+        if status == "Active":
+
+            st.success(status)
+
+        elif status == "Expired":
+
+            st.error(status)
+
+        else:
+
+            st.info(status)
+
+    with properties_tab:
+
+        with st.form(
+            f"cert_form_{product_name}"
+        ):
+
+            new_product_name = st.text_input(
+                "Product Name",
+                value=record["product_name"]
+            )
+
+            new_cert_type = st.text_input(
+                "Certification Type",
+                value=record["certification_type"]
+            )
+
+            new_report_number = st.text_input(
+                "Report Number",
+                value=record["report_number"]
+            )
+
+            new_standard = st.text_input(
+                "Standard Tested",
+                value=record["standard_tested"]
+            )
+
+            new_country = st.text_input(
+                "Country",
+                value=record["country"]
+            )
+
+            new_issue_date = st.text_input(
+                "Issue Date",
+                value=str(record["issue_date"])
+            )
+
+            new_status = st.text_input(
+                "Status",
+                value=record["status"]
+            )
+
+            submitted = st.form_submit_button(
+                "💾 Save Changes"
+            )
+
+        if submitted:
+
+            st.success(
+                "Certification Updated"
+            )
+
+            # Add UPDATE query here
