@@ -61,3 +61,20 @@ def get_approvals():
     conn.close()
 
     return df
+
+def get_certifications():
+
+    conn = get_connection()
+
+    df = pd.read_sql(
+        """
+        SELECT *
+        FROM certifications
+        ORDER BY product_name
+        """,
+        conn
+    )
+
+    conn.close()
+
+    return df
