@@ -7,6 +7,12 @@ st.title("🎓 Certifications")
 
 df = get_certifications()
 
+df["project"] = (
+    df["product_name"]
+    .astype(str)
+    .str.split(" - ")
+    .str[0]
+)
 # Search
 
 search = st.text_input(
@@ -100,6 +106,7 @@ grid_df = df.copy()
 
 grid_df = grid_df[
     [
+        "project",
         "product_name",
         "certification_type",
         "report_number",
@@ -111,6 +118,7 @@ grid_df = grid_df[
 ]
 
 grid_df.columns = [
+    "Project",
     "Product Name",
     "Certification Type",
     "Report Number",
@@ -122,6 +130,16 @@ grid_df.columns = [
 
 gb = GridOptionsBuilder.from_dataframe(
     grid_df
+)
+
+gb.configure_column(
+    "Project",
+    rowGroup=True,
+    hide=True
+)
+
+gb.configure_grid_options(
+    groupDisplayType="groupRows"
 )
 
 gb.configure_default_column(
