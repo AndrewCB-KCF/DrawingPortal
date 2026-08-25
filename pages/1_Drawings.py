@@ -106,11 +106,6 @@ function(params) {
     if (!params.data["File Path"]) {
         return params.value;
     }
-
-    return '<a href="' +
-           params.data["File params.value +
-           '</a>';
-}
 """)
 #
 grid_df["Open"] = grid_df["File Path"]
