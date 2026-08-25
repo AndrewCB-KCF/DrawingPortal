@@ -198,22 +198,26 @@ if selected_rows is not None and len(selected_rows) > 0:
     
         new_drawing_number = st.text_input(
             "Drawing Number",
-            value=record["drawing_number"]
+            value=record["drawing_number"],
+            key="edit_drawing_number"
         )
     
         new_title = st.text_input(
             "Title",
-            value=record["title"]
+            value=record["title"],
+            key="edit_title"
         )
     
         new_revision = st.text_input(
             "Revision",
-            value=record["revision"]
+            value=record["revision"],
+            key="edit_revision"
         )
     
         new_file_path = st.text_input(
             "File Path",
-            value=record["file_path"]
+            value=record["file_path"],
+            key="edit_file_path"
         )
     
         if st.button("💾 Save Changes"):
@@ -366,20 +370,24 @@ st.divider()
 with st.expander("➕ Add Drawing"):
 
     drawing_number = st.text_input(
-        "Drawing Number"
+        "Drawing Number",
+        key="add_drawing_number"
     )
 
     title = st.text_input(
-        "Title"
+        "Title",
+        key="add_title"
     )
 
     revision = st.text_input(
         "Revision",
-        value="A"
+        value="A",
+        key="add_revision"
     )
 
     file_path = st.text_input(
-        "SharePoint Link"
+        "SharePoint Link",
+        key="add_file_path"
     )
 
     if st.button("Save Drawing"):
