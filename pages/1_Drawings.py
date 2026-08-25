@@ -161,7 +161,7 @@ selected_rows = grid_response.get("selected_rows")
 if selected_rows is not None and len(selected_rows) > 0:
 
     drawing_number = selected_rows[0]["Drawing Number"]
-if selected_rows is not None and
+# if selected_rows is not None and len(selected_rows) > 0:
 
     record = df[
         df["drawing_number"]
