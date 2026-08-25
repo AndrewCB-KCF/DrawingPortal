@@ -162,11 +162,18 @@ if selected_rows is not None and len(selected_rows) > 0:
         )
     
         if record["file_path"]:
-    
+        
+            st.success("Current Revision")
+        
             st.link_button(
-                "📂 Open Drawing",
-                record["file_path"]
+                f"📂 Open Revision {record['revision']}",
+                record["file_path"],
+                use_container_width=True
             )
+
+else:
+
+    st.warning("No drawing URL available.")
 
     with revisions_tab:
     
@@ -180,13 +187,20 @@ if selected_rows is not None and len(selected_rows) > 0:
         if len(selected_revisions) > 0:
     
             for _, rev in selected_revisions.iterrows():
-    
-                if rev["file_path"]:
-    
-                    st.link_button(
-                        f"Revision {rev['revision']}",
-                        rev["file_path"]
-                    )
+            
+                col1, col2 = st.columns([1, 3])
+            
+                with col1:
+                    st.write(f"Rev {rev['revision']}")
+            
+                with col2:
+            
+                    if rev["file_path"]:
+            
+                        st.link_button(
+                            "📂 Open",
+                            rev["file_path"]
+                        )
     
         else:
     
