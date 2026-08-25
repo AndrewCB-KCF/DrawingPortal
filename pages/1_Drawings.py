@@ -122,12 +122,6 @@ gb.configure_default_column(
     resizable=True
 )
 
-gb.configure_default_column(
-    sortable=True,
-    filter=True,
-    resizable=True
-)
-
 gb.configure_selection(
     selection_mode="single",
     use_checkbox=False
