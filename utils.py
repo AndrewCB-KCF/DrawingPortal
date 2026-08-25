@@ -6,7 +6,7 @@ db_path = Path(__file__).parent / "SMARTDrawings Database-KCF-4DPWP74 - Copy.db"
 
 
 def get_connection():
-    return sqlite3.connect(DB_PATH)
+    return sqlite3.connect(db_path)
 
 
 def get_drawings():
