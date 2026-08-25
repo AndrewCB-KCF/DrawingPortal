@@ -100,29 +100,33 @@ grid_df.columns = [
     "Status",
     "File Path"
 ]
+#Comment below if doesn't work
+link_renderer = JsCode("""
+function(params) {
+    if (!params.data["File Path"]) {
+        return params.value;
+    }
 
+    return '' +
+           params.data[';
+}
+""")
+#
 grid_df["Open"] = grid_df["File Path"]
 
-# link_renderer = JsCode("""
-# function(params) {
-#     return `<{params.data['File Path']}
-#                ${params.value}
-#             </a>`;
-# }
-# """)
-
-# gb.configure_column(
-#     "Drawing Number",
-#     cellRenderer=link_renderer
-# )
 
 gb = GridOptionsBuilder.from_dataframe(grid_df)
+#Comment out below if doesn't work
+gb.configure_column(
+    "Drawing Number",
+    cellRenderer=link_renderer
+)
 
-# gb.configure_column(
-#     "Open",
-#     cellRenderer=open_link
-# )
-
+gb.configure_column(
+    "File Path",
+    hide=True
+)
+#
 gb.configure_default_column(
     sortable=True,
     filter=True,
