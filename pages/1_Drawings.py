@@ -160,7 +160,7 @@ selected_rows = grid_response.get("selected_rows")
 
 if selected_rows is not None and len(selected_rows) > 0:
 
-    drawing_number =["
+    drawing_number = selected_rows[0]["Drawing Number"]
 if selected_rows is not None and
 
     record = df[
@@ -173,7 +173,7 @@ if selected_rows is not None and
     st.subheader(record["title"])
 
     st.write(
-        f"[0Drawing Number: {recorddrawing_number']}"
+        f"Drawing Number: {record['drawing_number']}"
     )
 
     st.write(
