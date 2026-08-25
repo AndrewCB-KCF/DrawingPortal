@@ -167,7 +167,7 @@ if (
     with details_tab:
 
         st.subheader(
-            record["product_name"]
+            record["Product Name"]
         )
 
         st.write(
