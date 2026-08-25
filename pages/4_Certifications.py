@@ -223,7 +223,7 @@ if (
     #     ]
     # )
 
-    details_tab = st.tabs(
+    details_tab = st.tab(
         [
             "Details"
         ]
