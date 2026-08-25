@@ -278,127 +278,127 @@ if selected_rows is not None and len(selected_rows) > 0:
     
             st.rerun()
 
+    with approvals_tab:
+    
+        st.subheader("✅ Approval Workflow")
+    
+        reviewer = st.text_input(
+            "Reviewer",
+            key=f"reviewer_{drawing_number}"
+        )
+    
+        comments = st.text_area(
+            "Comments",
+            key=f"comments_{drawing_number}"
+        )
+    
+        col1, col2 = st.columns(2)
+    
+        with col1:
+    
+            if st.button(
+                "✅ Approve",
+                key=f"approve_{drawing_number}"
+            ):
+    
+                conn = get_connection()
+                cursor = conn.cursor()
+    
+                cursor.execute(
+                    """
+                    UPDATE drawings
+                    SET approval_status='Approved'
+                    WHERE drawing_number=?
+                    """,
+                    (drawing_number,)
+                )
+    
+                cursor.execute(
+                    """
+                    INSERT INTO approvals
+                    (
+                        drawing_number,
+                        revision,
+                        reviewer,
+                        decision,
+                        comments,
+                        approval_date
+                    )
+                    VALUES (?, ?, ?, ?, ?, ?)
+                    """,
+                    (
+                        drawing_number,
+                        record["revision"],
+                        reviewer,
+                        "Approved",
+                        comments,
+                        datetime.now().strftime(
+                            "%Y-%m-%d %H:%M:%S"
+                        )
+                    )
+                )
+    
+                conn.commit()
+                conn.close()
+    
+                st.success("Drawing Approved")
+    
+                st.rerun()
+    
+        with col2:
+    
+            if st.button(
+                "❌ Reject",
+                key=f"reject_{drawing_number}"
+            ):
+    
+                conn = get_connection()
+                cursor = conn.cursor()
+    
+                cursor.execute(
+                    """
+                    UPDATE drawings
+                    SET approval_status='Rejected'
+                    WHERE drawing_number=?
+                    """,
+                    (drawing_number,)
+                )
+    
+                cursor.execute(
+                    """
+                    INSERT INTO approvals
+                    (
+                        drawing_number,
+                        revision,
+                        reviewer,
+                        decision,
+                        comments,
+                        approval_date
+                    )
+                    VALUES (?, ?, ?, ?, ?, ?)
+                    """,
+                    (
+                        drawing_number,
+                        record["revision"],
+                        reviewer,
+                        "Rejected",
+                        comments,
+                        datetime.now().strftime(
+                            "%Y-%m-%d %H:%M:%S"
+                        )
+                    )
+                )
+    
+                conn.commit()
+                conn.close()
+    
+                st.success("Drawing Rejected")
+    
+                st.rerun()
+
 else:
 
     st.info("Select a drawing to view details.")
-
-with approvals_tab:
-
-    st.subheader("✅ Approval Workflow")
-
-    reviewer = st.text_input(
-        "Reviewer",
-        key=f"reviewer_{drawing_number}"
-    )
-
-    comments = st.text_area(
-        "Comments",
-        key=f"comments_{drawing_number}"
-    )
-
-    col1, col2 = st.columns(2)
-
-    with col1:
-
-        if st.button(
-            "✅ Approve",
-            key=f"approve_{drawing_number}"
-        ):
-
-            conn = get_connection()
-            cursor = conn.cursor()
-
-            cursor.execute(
-                """
-                UPDATE drawings
-                SET approval_status='Approved'
-                WHERE drawing_number=?
-                """,
-                (drawing_number,)
-            )
-
-            cursor.execute(
-                """
-                INSERT INTO approvals
-                (
-                    drawing_number,
-                    revision,
-                    reviewer,
-                    decision,
-                    comments,
-                    approval_date
-                )
-                VALUES (?, ?, ?, ?, ?, ?)
-                """,
-                (
-                    drawing_number,
-                    record["revision"],
-                    reviewer,
-                    "Approved",
-                    comments,
-                    datetime.now().strftime(
-                        "%Y-%m-%d %H:%M:%S"
-                    )
-                )
-            )
-
-            conn.commit()
-            conn.close()
-
-            st.success("Drawing Approved")
-
-            st.rerun()
-
-    with col2:
-
-        if st.button(
-            "❌ Reject",
-            key=f"reject_{drawing_number}"
-        ):
-
-            conn = get_connection()
-            cursor = conn.cursor()
-
-            cursor.execute(
-                """
-                UPDATE drawings
-                SET approval_status='Rejected'
-                WHERE drawing_number=?
-                """,
-                (drawing_number,)
-            )
-
-            cursor.execute(
-                """
-                INSERT INTO approvals
-                (
-                    drawing_number,
-                    revision,
-                    reviewer,
-                    decision,
-                    comments,
-                    approval_date
-                )
-                VALUES (?, ?, ?, ?, ?, ?)
-                """,
-                (
-                    drawing_number,
-                    record["revision"],
-                    reviewer,
-                    "Rejected",
-                    comments,
-                    datetime.now().strftime(
-                        "%Y-%m-%d %H:%M:%S"
-                    )
-                )
-            )
-
-            conn.commit()
-            conn.close()
-
-            st.success("Drawing Rejected")
-
-            st.rerun()
 
 with st.expander("➕ Add Drawing"):
 
