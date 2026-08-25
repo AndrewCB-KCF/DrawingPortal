@@ -2,7 +2,7 @@ import streamlit as st
 import sqlite3
 from datetime import datetime
 from st_aggrid import AgGrid, GridOptionsBuilder
-
+from st_aggrid import JsCode
 from utils import (
     get_drawings,
     get_connection,
@@ -101,7 +101,26 @@ grid_df.columns = [
     "File Path"
 ]
 
+grid_df["Open"] = grid_df["File Path"]
+
+open_link = JsCode("""
+function(params) {
+    return '<a href="' + params.value     '📂 Open</a>';
+}
+""")
+
 gb = GridOptionsBuilder.from_dataframe(grid_df)
+
+gb.configure_column(
+    "Open",
+    cellRenderer=open_link
+)
+
+gb.configure_default_column(
+    sortable=True,
+    filter=True,
+    resizable=True
+)
 
 gb.configure_default_column(
     sortable=True,
