@@ -103,9 +103,8 @@ grid_df.columns = [
 #Comment below if doesn't work
 link_renderer = JsCode("""
 function(params) {
-    if (!params.data["File Path"]) {
-        return params.value;
-    }
+    return params.value;
+}
 """)
 #
 grid_df["Open"] = grid_df["File Path"]
