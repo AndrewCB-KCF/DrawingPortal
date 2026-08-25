@@ -11,7 +11,7 @@ st.title("🎓 Certifications")
 
 
 df = pd.read_excel(
-    "data/certifications.xlsx"
+    "data/Certifications.xlsx"
 )
 
 df = df[
