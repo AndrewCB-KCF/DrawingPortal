@@ -1,6 +1,6 @@
 import streamlit as st
 from st_aggrid import AgGrid, GridOptionsBuilder
-
+from st_aggrid import GridUpdateMode
 from utils import get_certifications
 
 st.title("🎓 Certifications")
@@ -140,6 +140,7 @@ grid_options = gb.build()
 grid_response = AgGrid(
     grid_df,
     gridOptions=grid_options,
+    update_mode=GridUpdateMode.SELECTION_CHANGED,
     height=400,
     fit_columns_on_grid_load=True
 )
