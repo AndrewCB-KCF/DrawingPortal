@@ -172,6 +172,14 @@ if selected_rows is not None and len(selected_rows) > 0:
                 use_container_width=True
             )
 
+            st.subheader("👁 Drawing Preview")
+            
+            st.components.v1.iframe(
+                record["file_path"],
+                height=800,
+                scrolling=True
+            )
+    
     with revisions_tab:
     
         st.subheader("Revision History")
