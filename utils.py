@@ -2,11 +2,11 @@ import sqlite3
 import pandas as pd
 from pathlib import Path
 
-db_path = Path(__file__).parent / "SMARTDrawings Database-KCF-4DPWP74 - Copy.db"
+DB_PATH = Path(__file__).parent / "SMARTDrawings Database-KCF-4DPWP74 - Copy.db"
 
 
 def get_connection():
-    return sqlite3.connect(db_path)
+    return sqlite3.connect(DB_PATH)
 
 
 def get_drawings():
