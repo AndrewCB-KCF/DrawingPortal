@@ -156,9 +156,9 @@ grid_response = AgGrid(
 
 # if len(df) > 0:
 
-selected_rows = grid_response["selected_rows"]
+selected_rows = grid_response.get("selected_rows")
 
-if len(selected_rows) > 0:
+if selected_rows is not None and len(selected_rows) > 0:
 
     drawing_number = selected_rows[0]["Drawing Number"]
 
