@@ -1,10 +1,12 @@
 import streamlit as st
 import sqlite3
 from datetime import datetime
+from st_aggrid import AgGrid, GridOptionsBuilder
 
 from utils import (
     get_drawings,
-    get_connection
+    get_connection,
+    get_revision_history
 )
 
 st.title("📐 Drawings Library")
@@ -14,6 +16,9 @@ df = get_drawings()
 search = st.text_input(
     "🔍 Search Drawings"
 )
+
+df = get_drawings()
+revision_df = get_revision_history()
 
 if search:
 
@@ -76,44 +81,86 @@ if status_filter != "All":
         == status_filter
     ]
 
-display_df = df.copy()
+grid_df = df.copy()
 
-display_df["Drawing Number"] = display_df.apply(
-    lambda row:
-        f"<a href='{row['file_path']}' target='_blank'>{row['drawing_number']}</a>",
-    axis=1
-)
-
-display_df = display_df[
+grid_df = grid_df[
     [
-        "Drawing Number",
+        "drawing_number",
         "title",
         "revision",
-        "approval_status"
+        "approval_status",
+        "file_path"
     ]
 ]
 
-display_df.columns = [
+grid_df.columns = [
     "Drawing Number",
     "Title",
     "Revision",
-    "Status"
+    "Status",
+    "File Path"
 ]
+# display_df = df.copy()
 
-st.markdown(
-    display_df.to_html(
-        escape=False,
-        index=False
-    ),
-    unsafe_allow_html=True
+# display_df["Drawing Number"] = display_df.apply(
+#     lambda row:
+#         f"<a href='{row['file_path']}' target='_blank'>{row['drawing_number']}</a>",
+#     axis=1
+# )
+
+# display_df = display_df[
+#     [
+#         "Drawing Number",
+#         "title",
+#         "revision",
+#         "approval_status"
+#     ]
+# ]
+
+# display_df.columns = [
+#     "Drawing Number",
+#     "Title",
+#     "Revision",
+#     "Status"
+# ]
+
+# st.markdown(
+#     display_df.to_html(
+#         escape=False,
+#         index=False
+#     ),
+#     unsafe_allow_html=True
+# )
+
+gb = GridOptionsBuilder.from_dataframe(grid_df)
+
+gb.configure_default_column(
+    sortable=True,
+    filter=True,
+    resizable=True
 )
 
-if len(df) > 0:
+gb.configure_selection(
+    selection_mode="single",
+    use_checkbox=False
+)
 
-    drawing_number = st.selectbox(
-        "Select Drawing",
-        df["drawing_number"]
-    )
+grid_options = gb.build()
+
+grid_response = AgGrid(
+    grid_df,
+    gridOptions=grid_options,
+    height=400,
+    fit_columns_on_grid_load=True
+)
+
+# if len(df) > 0:
+
+selected_rows = grid_response["selected_rows"]
+
+if len(selected_rows) > 0:
+
+    drawing_number = selected_rows[0]["Drawing Number"]
 
     record = df[
         df["drawing_number"]
@@ -143,6 +190,28 @@ if len(df) > 0:
             record["file_path"]
         )
 
+st.subheader("Revision History")
+
+selected_revisions = revision_df[
+    revision_df["drawing_number"]
+    == drawing_number
+]
+
+if len(selected_revisions) > 0:
+
+    for _, rev in selected_revisions.iterrows():
+
+        if rev["file_path"]:
+
+            st.link_button(
+                f"Revision {rev['revision']}",
+                rev["file_path"]
+            )
+
+else:
+
+    st.info("No revision history found.")
+    
     reviewer = st.text_input(
         "Reviewer"
     )
