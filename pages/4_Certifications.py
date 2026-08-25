@@ -75,6 +75,18 @@ if status_filter != "All":
         == status_filter
     ]
 
+project_filter = st.selectbox(
+    "Project",
+    ["All"] +
+    sorted(df["project"].unique())
+)
+
+if project_filter != "All":
+
+    df = df[
+        df["project"] == project_filter
+    ]
+
 # Metrics
 
 col1, col2, col3 = st.columns(3)
