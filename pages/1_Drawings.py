@@ -137,50 +137,113 @@ if selected_rows is not None and len(selected_rows) > 0:
         == drawing_number
     ].iloc[0]
 
-    st.divider()
-
-    st.subheader(record["title"])
-
-    st.write(
-        f"Drawing Number: {record['drawing_number']}"
+    details_tab, revisions_tab, properties_tab = st.tabs(
+        [
+            "Details",
+            "Revision History",
+            "Properties"
+        ]
     )
 
-    st.write(
-        f"Revision: {record['revision']}"
-    )
-
-    st.write(
-        f"Status: {record['approval_status']}"
-    )
-
-    if record["file_path"]:
-
-        st.link_button(
-            "📂 Open Drawing",
-            record["file_path"]
+    with details_tab:
+    
+        st.sub[0"0, revisions_tab, properties_tabte(
+            f"Drawing Number: {record['drawing_number']}"
         )
+    
+        st.write(
+            f"Revision: {record['revision']}"
+        )
+    
+        st.write(
+            f"Status: {record['approval_status']}"
+        )
+    
+        if record["file_path"]:
+    
+            st.link_button(
+                "📂 Open Drawing",
+                record["file_path"]
+            )
 
-    st.subheader("Revision History")
+    with revisions_tab:
+    
+        st.subheader("Revision History")
+    
+        selected_revisions = revision_df[
+            revision_df["drawing_number"]
+            == drawing_number
+        ]
+    
+        if len(selected_revisions) > 0:
+    
+            for _, rev in selected_revisions.iterrows():
+    
+                if rev["file_path"]:
+    
+                    st.link_button(
+                        f"Revision {rev['revision']}",
+                        rev["file_path"]
+                    )
+    
+        else:
+    
+            st.info("No revision history found.")
 
-    selected_revisions = revision_df[
-        revision_df["drawing_number"]
-        == drawing_number
-    ]
-
-    if len(selected_revisions) > 0:
-
-        for _, rev in selected_revisions.iterrows():
-
-            if rev["file_path"]:
-
-                st.link_button(
-                    f"Revision {rev['revision']}",
-                    rev["file_path"]
+    with properties_tab:
+    
+        st.subheader("⚙️ Drawing Properties")
+    
+        new_drawing_number = st.text_input(
+            "Drawing Number",
+            value=record["drawing_number"]
+        )
+    
+        new_title = st.text_input(
+            "Title",
+            value=record["title"]
+        )
+    
+        new_revision = st.text_input(
+            "Revision",
+            value=record["revision"]
+        )
+    
+        new_file_path = st.text_input(
+            "File Path",
+            value=record["file_path"]
+        )
+    
+        if st.button("💾 Save Changes"):
+    
+            conn = get_connection()
+            cursor = conn.cursor()
+    
+            cursor.execute(
+                """
+                UPDATE drawings
+                SET
+                    drawing_number = ?,
+                    title = ?,
+                    revision = ?,
+                    file_path = ?
+                WHERE drawing_number = ?
+                """,
+                (
+                    new_drawing_number,
+                    new_title,
+                    new_revision,
+                    new_file_path,
+                    drawing_number
                 )
-
-    else:
-
-        st.info("No revision history found.")
+            )
+    
+            conn.commit()
+            conn.close()
+    
+            st.success("Drawing Updated")
+    
+            st.rerun()
     
     reviewer = st.text_input(
         "Reviewer"
