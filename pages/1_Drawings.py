@@ -171,10 +171,6 @@ if selected_rows is not None and len(selected_rows) > 0:
                 use_container_width=True
             )
 
-else:
-
-    st.warning("No drawing URL available.")
-
     with revisions_tab:
     
         st.subheader("Revision History")
@@ -264,7 +260,11 @@ else:
             st.success("Drawing Updated")
     
             st.rerun()
-    
+
+else:
+
+    st.info("Select a drawing to view details.")
+
     reviewer = st.text_input(
         "Reviewer"
     )
