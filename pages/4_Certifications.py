@@ -155,7 +155,7 @@ if (
     len(selected_rows) > 0
 ):
 
-record = selected_rows.iloc[0]
+    record = selected_rows.iloc[0]
 
     details_tab, properties_tab = st.tabs(
         [
