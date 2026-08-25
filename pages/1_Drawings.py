@@ -160,7 +160,8 @@ selected_rows = grid_response.get("selected_rows")
 
 if selected_rows is not None and len(selected_rows) > 0:
 
-    st.write(selected_rows)
+    st.write(selected_rows.columns.tolist())
+    st.write(selected_rows.head())
     drawing_number = selected_rows.iloc[0]["drawing_number"]
 # if selected_rows is not None and len(selected_rows) > 0:
 
