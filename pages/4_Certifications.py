@@ -212,37 +212,37 @@ if (
 
             new_product_name = st.text_input(
                 "Product Name",
-                value=record["product_name"]
+                value=record["Product Name"]
             )
 
             new_cert_type = st.text_input(
                 "Certification Type",
-                value=record["certification_type"]
+                value=record["Certification Type"]
             )
 
             new_report_number = st.text_input(
                 "Report Number",
-                value=record["report_number"]
+                value=record["Report Number"]
             )
 
             new_standard = st.text_input(
                 "Standard Tested",
-                value=record["standard_tested"]
+                value=record["Standard Tested"]
             )
 
             new_country = st.text_input(
                 "Country",
-                value=record["country"]
+                value=record["Country"]
             )
 
             new_issue_date = st.text_input(
                 "Issue Date",
-                value=str(record["issue_date"])
+                value=str(record["Issue Date"])
             )
 
             new_status = st.text_input(
                 "Status",
-                value=record["status"]
+                value=record["Status"]
             )
 
             submitted = st.form_submit_button(
