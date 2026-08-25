@@ -160,7 +160,8 @@ selected_rows = grid_response.get("selected_rows")
 
 if selected_rows is not None and len(selected_rows) > 0:
 
-    drawing_number = selected_rows[0]["Drawing Number"]
+    drawing_number =["
+if selected_rows is not None and
 
     record = df[
         df["drawing_number"]
@@ -172,7 +173,7 @@ if selected_rows is not None and len(selected_rows) > 0:
     st.subheader(record["title"])
 
     st.write(
-        f"Drawing Number: {record['drawing_number']}"
+        f"[0Drawing Number: {recorddrawing_number']}"
     )
 
     st.write(
@@ -190,27 +191,27 @@ if selected_rows is not None and len(selected_rows) > 0:
             record["file_path"]
         )
 
-st.subheader("Revision History")
+    st.subheader("Revision History")
 
-selected_revisions = revision_df[
-    revision_df["drawing_number"]
-    == drawing_number
-]
+    selected_revisions = revision_df[
+        revision_df["drawing_number"]
+        == drawing_number
+    ]
 
-if len(selected_revisions) > 0:
+    if len(selected_revisions) > 0:
 
-    for _, rev in selected_revisions.iterrows():
+        for _, rev in selected_revisions.iterrows():
 
-        if rev["file_path"]:
+            if rev["file_path"]:
 
-            st.link_button(
-                f"Revision {rev['revision']}",
-                rev["file_path"]
-            )
+                st.link_button(
+                    f"Revision {rev['revision']}",
+                    rev["file_path"]
+                )
 
-else:
+    else:
 
-    st.info("No revision history found.")
+        st.info("No revision history found.")
     
     reviewer = st.text_input(
         "Reviewer"
