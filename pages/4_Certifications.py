@@ -225,7 +225,7 @@ if (
 
     details_tab = st.tabs(
         [
-            "Details",
+            "Details"
         ]
     )
     
