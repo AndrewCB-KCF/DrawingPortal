@@ -216,16 +216,10 @@ if (
 
     record = selected_rows.iloc[0]
 
-    # details_tab, properties_tab = st.tabs(
-    #     [
-    #         "Details",
-    #         "Properties"
-    #     ]
-    # )
-
-    details_tab = st.tab(
+    details_tab, properties_tab = st.tabs(
         [
-            "Details"
+            "Details",
+            "Properties"
         ]
     )
     
