@@ -207,7 +207,7 @@ if (
     with properties_tab:
 
         with st.form(
-            f"cert_form_{product_name}"
+            f"cert_form_{Product Name}"
         ):
 
             new_product_name = st.text_input(
