@@ -16,7 +16,7 @@ df = pd.read_excel(
 
 df = df[
     [
-        "Product Name",
+        "Title",
         "Certification Type",
         "Report Number",
         "Standard Tested",
