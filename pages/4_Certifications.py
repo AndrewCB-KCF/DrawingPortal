@@ -304,14 +304,14 @@ if (
                 value=record["Status"]
             )
 
-            submitted = st.form_submit_button(
-                "💾 Save Changes"
-            )
+        #     submitted = st.form_submit_button(
+        #         "💾 Save Changes"
+        #     )
 
-        if submitted:
+        # if submitted:
 
-            st.success(
-                "Certification Updated"
-            )
+        #     st.success(
+        #         "Certification Updated"
+        #     )
 
             # Add UPDATE query here
