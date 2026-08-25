@@ -112,7 +112,7 @@ function(params) {
 """)
 
 gb.configure_column(
-    "Drawing Number",
+    "drawing_number",
     cellRenderer=link_renderer
 )
 
