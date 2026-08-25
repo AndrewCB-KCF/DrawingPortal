@@ -100,37 +100,6 @@ grid_df.columns = [
     "Status",
     "File Path"
 ]
-# display_df = df.copy()
-
-# display_df["Drawing Number"] = display_df.apply(
-#     lambda row:
-#         f"<a href='{row['file_path']}' target='_blank'>{row['drawing_number']}</a>",
-#     axis=1
-# )
-
-# display_df = display_df[
-#     [
-#         "Drawing Number",
-#         "title",
-#         "revision",
-#         "approval_status"
-#     ]
-# ]
-
-# display_df.columns = [
-#     "Drawing Number",
-#     "Title",
-#     "Revision",
-#     "Status"
-# ]
-
-# st.markdown(
-#     display_df.to_html(
-#         escape=False,
-#         index=False
-#     ),
-#     unsafe_allow_html=True
-# )
 
 gb = GridOptionsBuilder.from_dataframe(grid_df)
 
@@ -154,16 +123,14 @@ grid_response = AgGrid(
     fit_columns_on_grid_load=True
 )
 
-# if len(df) > 0:
 
 selected_rows = grid_response.get("selected_rows")
 
 if selected_rows is not None and len(selected_rows) > 0:
 
-    st.write(selected_rows.columns.tolist())
-    st.write(selected_rows.head())
+    # st.write(selected_rows.columns.tolist())
+    # st.write(selected_rows.head())
     drawing_number = selected_rows.iloc[0]["Drawing Number"]
-# if selected_rows is not None and len(selected_rows) > 0:
 
     record = df[
         df["drawing_number"]
