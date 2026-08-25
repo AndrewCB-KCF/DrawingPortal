@@ -138,6 +138,7 @@ grid_options = gb.build()
 grid_response = AgGrid(
     grid_df,
     gridOptions=grid_options,
+    allow_unsafe_jscode=True,
     height=400,
     fit_columns_on_grid_load=True
 )
