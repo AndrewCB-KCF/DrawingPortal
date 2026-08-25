@@ -111,10 +111,10 @@ grid_df["Open"] = grid_df["File Path"]
 
 gb = GridOptionsBuilder.from_dataframe(grid_df)
 
-gb.configure_column(
-    "Open",
-    cellRenderer=open_link
-)
+# gb.configure_column(
+#     "Open",
+#     cellRenderer=open_link
+# )
 
 gb.configure_default_column(
     sortable=True,
