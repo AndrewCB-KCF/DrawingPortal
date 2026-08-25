@@ -147,7 +147,9 @@ if selected_rows is not None and len(selected_rows) > 0:
 
     with details_tab:
     
-        st.sub[0"0, revisions_tab, properties_tabte(
+        st.subheader(record["title"])
+    
+        st.write(
             f"Drawing Number: {record['drawing_number']}"
         )
     
