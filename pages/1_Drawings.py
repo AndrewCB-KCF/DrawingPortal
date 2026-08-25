@@ -137,11 +137,12 @@ if selected_rows is not None and len(selected_rows) > 0:
         == drawing_number
     ].iloc[0]
 
-    details_tab, revisions_tab, properties_tab = st.tabs(
+    details_tab, revisions_tab, properties_tab, approvals_tab = st.tabs(
         [
             "Details",
             "Revision History",
-            "Properties"
+            "Properties",
+            "Approvals"
         ]
     )
 
@@ -261,19 +262,32 @@ if selected_rows is not None and len(selected_rows) > 0:
     
             st.rerun()
 
+else:
+
+    st.info("Select a drawing to view details.")
+
+    with approvals_tab:
+    
+        st.subheader("✅ Approval Workflow")
+    
         reviewer = st.text_input(
-            "Reviewer"
+            "Reviewer",
+            key=f"reviewer_{drawing_number}"
         )
     
         comments = st.text_area(
-            "Comments"
+            "Comments",
+            key=f"comments_{drawing_number}"
         )
     
         col1, col2 = st.columns(2)
     
         with col1:
     
-            if st.button("✅ Approve"):
+            if st.button(
+                "✅ Approve",
+                key=f"approve_{drawing_number}"
+            ):
     
                 conn = get_connection()
                 cursor = conn.cursor()
@@ -284,9 +298,7 @@ if selected_rows is not None and len(selected_rows) > 0:
                     SET approval_status='Approved'
                     WHERE drawing_number=?
                     """,
-                    (
-                        drawing_number,
-                    )
+                    (drawing_number,)
                 )
     
                 cursor.execute(
@@ -317,15 +329,16 @@ if selected_rows is not None and len(selected_rows) > 0:
                 conn.commit()
                 conn.close()
     
-                st.success(
-                    "Drawing Approved"
-                )
+                st.success("Drawing Approved")
     
                 st.rerun()
     
         with col2:
     
-            if st.button("❌ Reject"):
+            if st.button(
+                "❌ Reject",
+                key=f"reject_{drawing_number}"
+            ):
     
                 conn = get_connection()
                 cursor = conn.cursor()
@@ -336,9 +349,7 @@ if selected_rows is not None and len(selected_rows) > 0:
                     SET approval_status='Rejected'
                     WHERE drawing_number=?
                     """,
-                    (
-                        drawing_number,
-                    )
+                    (drawing_number,)
                 )
     
                 cursor.execute(
@@ -369,19 +380,9 @@ if selected_rows is not None and len(selected_rows) > 0:
                 conn.commit()
                 conn.close()
     
-                st.success(
-                    "Drawing Rejected"
-                )
+                st.success("Drawing Rejected")
     
                 st.rerun()
-    
-    st.divider()
-
-else:
-
-    st.info("Select a drawing to view details.")
-
-
 
 with st.expander("➕ Add Drawing"):
 
