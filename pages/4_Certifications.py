@@ -171,26 +171,26 @@ if (
         )
 
         st.write(
-            f"Certification Type: {record['certification_type']}"
+            f"Certification Type: {record['Certification Type']}"
         )
 
         st.write(
-            f"Report Number: {record['report_number']}"
+            f"Report Number: {record['Report Number']}"
         )
 
         st.write(
-            f"Standard Tested: {record['standard_tested']}"
+            f"Standard Tested: {record['Standard Tested']}"
         )
 
         st.write(
-            f"Country: {record['country']}"
+            f"Country: {record['Country']}"
         )
 
         st.write(
-            f"Issue Date: {record['issue_date']}"
+            f"Issue Date: {record['Issue Date']}"
         )
 
-        status = record["status"]
+        status = record["Status"]
 
         if status == "Active":
 
