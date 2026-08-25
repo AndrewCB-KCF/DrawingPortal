@@ -263,46 +263,53 @@ if (
 
             st.info(status)
 
-    # with properties_tab:
+    with properties_tab:
 
-    #     with st.form(
-    #         key=f"cert_form_{record['Product Name']}"
-    #     ):
+        with st.form(
+            key=f"cert_form_{record['Product Name']}"
+        ):
 
-    #         new_product_name = st.text_input(
-    #             "Product Name",
-    #             value=record["Product Name"]
-    #         )
+            new_product_name = st.text_input(
+                "Product Name",
+                value=record["Product Name"],
+                disabled=True
+            )
 
-    #         new_cert_type = st.text_input(
-    #             "Certification Type",
-    #             value=record["Certification Type"]
-    #         )
+            new_cert_type = st.text_input(
+                "Certification Type",
+                value=record["Certification Type"],
+                disabled=True
+            )
 
-    #         new_report_number = st.text_input(
-    #             "Report Number",
-    #             value=record["Report Number"]
-    #         )
+            new_report_number = st.text_input(
+                "Report Number",
+                value=record["Report Number"],
+                disabled=True
+            )
 
-    #         new_standard = st.text_input(
-    #             "Standard Tested",
-    #             value=record["Standard Tested"]
-    #         )
+            new_standard = st.text_input(
+                "Standard Tested",
+                value=record["Standard Tested"],
+                disabled=True
+            )
 
-    #         new_country = st.text_input(
-    #             "Country",
-    #             value=record["Country"]
-    #         )
+            new_country = st.text_input(
+                "Country",
+                value=record["Country"],
+                disabled=True
+            )
 
-    #         new_issue_date = st.text_input(
-    #             "Issue Date",
-    #             value=str(record["Issue Date"])
-    #         )
+            new_issue_date = st.text_input(
+                "Issue Date",
+                value=str(record["Issue Date"]),
+                disabled=True
+            )
 
-    #         new_status = st.text_input(
-    #             "Status",
-    #             value=record["Status"]
-    #         )
+            new_status = st.text_input(
+                "Status",
+                value=record["Status"],
+                disabled=True
+            )
 
         #     submitted = st.form_submit_button(
         #         "💾 Save Changes"
