@@ -107,8 +107,9 @@ function(params) {
         return params.value;
     }
 
-    return '' +
-           params.data[';
+    return '<a href="' +
+           params.data["File params.value +
+           '</a>';
 }
 """)
 #
