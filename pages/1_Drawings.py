@@ -204,32 +204,32 @@ if selected_rows is not None and len(selected_rows) > 0:
 
     with properties_tab:
     
-        st.subheader("⚙️ Drawing Properties")
+        with st.form(f"edit_form_{drawing_number}"):
     
-        new_drawing_number = st.text_input(
-            "Drawing Number",
-            value=record["drawing_number"],
-            key="edit_drawing_number"
-        )
+            new_drawing_number = st.text_input(
+                "Drawing Number",
+                value=record["drawing_number"]
+            )
     
-        new_title = st.text_input(
-            "Title",
-            value=record["title"],
-            key="edit_title"
-        )
+            new_title = st.text_input(
+                "Title",
+                value=record["title"]
+            )
     
-        new_revision = st.text_input(
-            "Revision",
-            value=record["revision"],
-            key="edit_revision"
-        )
+            new_revision = st.text_input(
+                "Revision",
+                value=record["revision"]
+            )
     
-        new_file_path = st.text_input(
-            "File Path",
-            value=record["file_path"],
-            key="edit_file_path"
-        )
+            new_file_path = st.text_input(
+                "File Path",
+                value=record["file_path"]
+            )
     
+            submitted = st.form_submit_button(
+                "💾 Save Changes"
+            )
+
         if st.button("💾 Save Changes"):
     
             conn = get_connection()
@@ -260,10 +260,6 @@ if selected_rows is not None and len(selected_rows) > 0:
             st.success("Drawing Updated")
     
             st.rerun()
-
-else:
-
-    st.info("Select a drawing to view details.")
 
     reviewer = st.text_input(
         "Reviewer"
@@ -380,6 +376,12 @@ else:
             st.rerun()
 
 st.divider()
+
+else:
+
+    st.info("Select a drawing to view details.")
+
+
 
 with st.expander("➕ Add Drawing"):
 
