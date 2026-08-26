@@ -6,6 +6,8 @@ import pandas as pd
 
 with st.spinner("Loading certifications..."):
     df = get_certifications()
+st.write(df.columns.tolist())
+st.stop()
 
 st.title("🎓 Certifications")
 
