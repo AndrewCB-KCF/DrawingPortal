@@ -9,6 +9,7 @@ DB_PATH = Path(__file__).parent / "SMARTDrawings Database-KCF-4DPWP74 - Copy.db"
 def get_connection():
     return sqlite3.connect(DB_PATH)
 
+
 @st.cache_data(ttl=300)
 def get_drawings():
 
@@ -26,6 +27,7 @@ def get_drawings():
     conn.close()
 
     return df
+
 
 @st.cache_data(ttl=300)
 def get_revision_history():
@@ -46,6 +48,7 @@ def get_revision_history():
     return df
 
 
+@st.cache_data(ttl=300)
 def get_approvals():
 
     conn = get_connection()
@@ -63,19 +66,10 @@ def get_approvals():
 
     return df
 
+
+@st.cache_data(ttl=3600)
 def get_certifications():
 
-    conn = get_connection()
-
-    df = pd.read_sql(
-        """
-        SELECT *
-        FROM certifications
-        ORDER BY product_name
-        """,
-        conn
+    return pd.read_excel(
+        "data/Certifications.xlsx"
     )
-
-    conn.close()
-
-    return df
