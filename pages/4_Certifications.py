@@ -6,9 +6,11 @@ import pandas as pd
 
 st.title("🎓 Certifications")
 
-#df = get_certifications()
-
-
+st.link_button(
+    "📂 Open SharePoint Certifications List",
+    "https://your-company.sharepoint.com/sites/YourSite/Lists/Certifications",
+    use_container_width=True
+)
 
 df = pd.read_excel(
     "data/Certifications.xlsx"
