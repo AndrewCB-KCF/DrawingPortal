@@ -143,11 +143,6 @@ gb = GridOptionsBuilder.from_dataframe(grid_df)
 #     cellRenderer=link_renderer
 # )
 
-# gb.configure_column(
-#     "File Path",
-#     hide=True
-# )
-#
 gb.configure_default_column(
     sortable=True,
     filter=True,
@@ -157,6 +152,29 @@ gb.configure_default_column(
 gb.configure_selection(
     selection_mode="single",
     use_checkbox=False
+)
+
+gb.configure_column(
+    "Open",
+    header_name="Open",
+    cellRenderer=JsCode("""
+        class UrlCellRenderer {
+            init(params) {
+                this.eGui = document.createElement('a');
+                this.eGui.innerText = '📂 Open';
+                this.eGui.setAttribute('href', params.value);
+                this.eGui.setAttribute('target', '_blank');
+            }
+            getGui() {
+                return this.eGui;
+            }
+        }
+    """)
+)
+
+gb.configure_column(
+    "File Path",
+    hide=True
 )
 
 grid_options = gb.build()
