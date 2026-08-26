@@ -1,8 +1,15 @@
 import streamlit as st
 from st_aggrid import AgGrid, GridOptionsBuilder
 from st_aggrid import GridUpdateMode
-from utils import get_certifications
 import pandas as pd
+
+@st.cache_data(ttl=3600)
+def load_certifications():
+    return pd.read_excel(
+        "data/Certifications.xlsx"
+    )
+
+df = load_certifications()
 
 st.title("🎓 Certifications")
 
@@ -16,9 +23,9 @@ st.link_button(
     use_container_width=True
 )
 
-df = pd.read_excel(
-    "data/Certifications.xlsx"
-)
+# df = pd.read_excel(
+#     "data/Certifications.xlsx"
+# )
 
 df = df[
     [
