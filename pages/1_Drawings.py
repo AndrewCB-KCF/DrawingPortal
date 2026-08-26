@@ -240,30 +240,12 @@ if selected_rows is not None and len(selected_rows) > 0:
             st.success(
                 f"Current Revision: {record['revision']}"
             )
-
-        if record["file_path"]:
-        
+    
             st.link_button(
                 f"📂 Open Revision {record['revision']}",
                 record["file_path"],
                 use_container_width=True
             )
-        
-            st.divider()
-        
-            st.subheader("Preview")
-        
-            components.iframe(
-                record["file_path"],
-                height=800,
-                scrolling=True
-            )
-    
-            # st.link_button(
-            #     f"📂 Open Revision {record['revision']}",
-            #     record["file_path"],
-            #     use_container_width=True
-            # )
     
     with revisions_tab:
     
