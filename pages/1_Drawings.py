@@ -2,7 +2,6 @@ import streamlit as st
 import sqlite3
 from datetime import datetime
 from st_aggrid import AgGrid, GridOptionsBuilder
-import streamlit.components.v1 as components
 from st_aggrid import JsCode
 from utils import (
     get_drawings,
