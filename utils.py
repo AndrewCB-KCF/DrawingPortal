@@ -1,6 +1,7 @@
 import sqlite3
 import pandas as pd
 from pathlib import Path
+import streamlit as st
 
 DB_PATH = Path(__file__).parent / "SMARTDrawings Database-KCF-4DPWP74 - Copy.db"
 
@@ -8,7 +9,7 @@ DB_PATH = Path(__file__).parent / "SMARTDrawings Database-KCF-4DPWP74 - Copy.db"
 def get_connection():
     return sqlite3.connect(DB_PATH)
 
-
+@st.cache_data(ttl=300)
 def get_drawings():
 
     conn = get_connection()
@@ -26,7 +27,7 @@ def get_drawings():
 
     return df
 
-
+@st.cache_data(ttl=300)
 def get_revision_history():
 
     conn = get_connection()
