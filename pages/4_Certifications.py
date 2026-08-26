@@ -16,6 +16,7 @@ st.link_button(
     use_container_width=True
 )
 
+@st.cache_data(ttl=3600)
 df = pd.read_excel(
     "data/Certifications.xlsx"
 )
