@@ -6,6 +6,10 @@ import pandas as pd
 
 st.title("🎓 Certifications")
 
+st.info(
+    "Need to edit or add certifications? Open the SharePoint list below."
+)
+
 st.link_button(
     "📂 Open SharePoint Certifications List",
     "https://kcftech.sharepoint.com/sites/HardwareDepartment/Lists/Certification%20Tracker/AllItems.aspx",
