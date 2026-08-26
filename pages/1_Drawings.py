@@ -19,7 +19,13 @@ if "search" not in st.session_state:
 if "status_filter" not in st.session_state:
     st.session_state.status_filter = "All"
 
+if st.session_state.get("clear_filters", False):
+    st.session_state["search"] = ""
+    st.session_state["status_filter"] = "All"
+    st.session_state.clear_filters = False
+
 col1, col2, col3 = st.columns([4, 2, 1])
+
 
 with col1:
     search = st.text_input(
@@ -43,9 +49,8 @@ with col3:
     st.write("")
     st.write("")
 
-    if st.button("🔄 Reset"):
-        st.session_state.search = ""
-        st.session_state.status_filter = "All"
+    if st.button("🔄 Reset Filters"):
+        st.session_state.clear_filters = True
         st.rerun()
 
 df = get_drawings()
