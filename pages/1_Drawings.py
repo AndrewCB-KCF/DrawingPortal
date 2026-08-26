@@ -13,9 +13,40 @@ st.title("📐 Drawings Library")
 
 df = get_drawings()
 
-search = st.text_input(
-    "🔍 Search Drawings"
-)
+if "search" not in st.session_state:
+    st.session_state.search = ""
+
+if "status_filter" not in st.session_state:
+    st.session_state.status_filter = "All"
+
+col1, col2, col3 = st.columns([4, 2, 1])
+
+with col1:
+    search = st.text_input(
+        "🔍 Search Drawings",
+        key="search"
+    )
+
+with col2:
+    status_filter = st.selectbox(
+        "Status",
+        [
+            "All",
+            "Pending",
+            "Approved",
+            "Rejected"
+        ],
+        key="status_filter"
+    )
+
+with col3:
+    st.write("")
+    st.write("")
+
+    if st.button("🔄 Reset"):
+        st.session_state.search = ""
+        st.session_state.status_filter = "All"
+        st.rerun()
 
 df = get_drawings()
 revision_df = get_revision_history()
@@ -63,16 +94,6 @@ if search:
             )
         )
     ]
-
-status_filter = st.selectbox(
-    "Status",
-    [
-        "All",
-        "Pending",
-        "Approved",
-        "Rejected"
-    ]
-)
 
 if status_filter != "All":
 
