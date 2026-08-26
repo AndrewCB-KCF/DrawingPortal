@@ -60,14 +60,8 @@ df["project"] = (
 # Filter State
 # -----------------------------
 
-if "cert_search" not in st.session_state:
-    st.session_state.cert_search = ""
-
-if "cert_status" not in st.session_state:
-    st.session_state.cert_status = "All"
-
-if "cert_project" not in st.session_state:
-    st.session_state.cert_project = "All"
+if "cert_reset_count" not in st.session_state:
+    st.session_state.cert_reset_count = 0
 
 status_options = ["All"] + sorted(
     df["status"].dropna().unique().tolist()
@@ -86,30 +80,29 @@ col1, col2, col3, col4 = st.columns([4, 2, 2, 1])
 with col1:
     search = st.text_input(
         "🔍 Search Certifications",
-        key="cert_search",
+        key=f"cert_search_{st.session_state.cert_reset_count}",
     )
 
 with col2:
     status_filter = st.selectbox(
         "Status",
         status_options,
-        key="cert_status",
+        key=f"cert_status_{st.session_state.cert_reset_count}",
     )
 
 with col3:
     project_filter = st.selectbox(
         "Project",
         project_options,
-        key="cert_project",
+        key=f"cert_project_{st.session_state.cert_reset_count}",
     )
 
 with col4:
     st.write("")
     st.write("")
+
     if st.button("🧹 Clear"):
-        st.session_state.cert_search = ""
-        st.session_state.cert_status = "All"
-        st.session_state.cert_project = "All"
+        st.session_state.cert_reset_count += 1
         st.rerun()
 
 # -----------------------------
