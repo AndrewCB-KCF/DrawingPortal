@@ -8,22 +8,22 @@ pg = st.navigation(
             icon="🏠"
         ),
         st.Page(
-            "pages/Drawings.py",
+            "pages/1_Drawings.py",
             title="Drawings",
             icon="📐"
         ),
         st.Page(
-            "pages/Revision_History.py",
+            "pages/2_Revision_History.py",
             title="Revision History",
             icon="📜"
         ),
         st.Page(
-            "pages/Approval_History.py",
+            "pages/3_Approval_History.py",
             title="Approval History",
             icon="✅"
         ),
         st.Page(
-            "pages/Certifications.py",
+            "pages/4_Certifications.py",
             title="Certifications",
             icon="🎓"
         ),
