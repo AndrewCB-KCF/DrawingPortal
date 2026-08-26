@@ -195,18 +195,26 @@ if selected_rows is not None and len(selected_rows) > 0:
     with details_tab:
     
         st.subheader(record["title"])
-    
-        st.write(
-            f"Drawing Number: {record['drawing_number']}"
-        )
-    
-        st.write(
-            f"Revision: {record['revision']}"
-        )
-    
-        st.write(
-            f"Status: {record['approval_status']}"
-        )
+        
+        col1, col2, col3 = st.columns(3)
+        
+        with col1:
+            st.metric(
+                "Drawing Number",
+                record["drawing_number"]
+            )
+        
+        with col2:
+            st.metric(
+                "Revision",
+                record["revision"]
+            )
+        
+        with col3:
+            st.metric(
+                "Status",
+                record["approval_status"]
+            )
     
         if record["file_path"]:
         
