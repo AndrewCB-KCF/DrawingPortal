@@ -8,7 +8,7 @@ st.title("🎓 Certifications")
 
 st.link_button(
     "📂 Open SharePoint Certifications List",
-    "https://your-company.sharepoint.com/sites/YourSite/Lists/Certifications",
+    "https://kcftech.sharepoint.com/sites/HardwareDepartment/Lists/Certification%20Tracker/AllItems.aspx",
     use_container_width=True
 )
 
