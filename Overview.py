@@ -50,5 +50,6 @@ st.write(
     - View Drawings
     - Review Revisions
     - View Approval History
+    - View Certifications
     """
 )
