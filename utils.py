@@ -2,6 +2,7 @@ import sqlite3
 import pandas as pd
 from pathlib import Path
 import streamlit as st
+import re
 
 DB_PATH = Path(__file__).parent / "SMARTDrawings Database-KCF-4DPWP74 - Copy.db"
 
@@ -70,6 +71,26 @@ def get_approvals():
 @st.cache_data(ttl=3600)
 def get_certifications():
 
-    return pd.read_excel(
-        "data/Certifications.xlsx"
+    df = pd.read_csv(
+        "data/Certifications.csv"
     )
+
+    def extract_report_numbers(html):
+
+        if pd.isna(html):
+            return ""
+
+        reports = re.findall(
+            r'title="([^"]+)"',
+            str(html)
+        )
+
+        return ", ".join(reports)
+
+    if "Report Number" in df.columns:
+        df["Report Number"] = (
+            df["Report Number"]
+            .apply(extract_report_numbers)
+        )
+
+    return df
