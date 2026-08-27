@@ -500,34 +500,71 @@ with st.expander("➕ Add Drawing"):
         cursor = conn.cursor()
     
         try:
-    
+        
+            # Check if drawing already exists
             cursor.execute(
                 """
-                INSERT INTO drawings
-                (
-                    drawing_number,
-                    title,
-                    revision,
-                    file_path,
-                    approval_status
-                )
-                VALUES (%s, %s, %s, %s, %s)
+                SELECT drawing_number
+                FROM drawings
+                WHERE drawing_number = %s
                 """,
-                (
-                    drawing_number,
-                    title,
-                    revision,
-                    file_path,
-                    "Pending"
-                )
+                (drawing_number,)
             )
-
+        
+            existing = cursor.fetchone()
+        
+            if existing:
+        
+                # Update current revision in drawings table
+                cursor.execute(
+                    """
+                    UPDATE drawings
+                    SET
+                        title = %s,
+                        revision = %s,
+                        file_path = %s,
+                        approval_status = 'Pending'
+                    WHERE drawing_number = %s
+                    """,
+                    (
+                        title,
+                        revision,
+                        file_path,
+                        drawing_number
+                    )
+                )
+        
+            else:
+        
+                # Brand new drawing
+                cursor.execute(
+                    """
+                    INSERT INTO drawings
+                    (
+                        drawing_number,
+                        title,
+                        revision,
+                        file_path,
+                        approval_status
+                    )
+                    VALUES (%s, %s, %s, %s, %s)
+                    """,
+                    (
+                        drawing_number,
+                        title,
+                        revision,
+                        file_path,
+                        "Pending"
+                    )
+                )
+        
+            # Always add a revision history record
             cursor.execute(
                 """
                 INSERT INTO revision_history
                 (
                     drawing_number,
-        	        title,
+                    title,
                     revision,
                     file_path
                 )
@@ -535,19 +572,19 @@ with st.expander("➕ Add Drawing"):
                 """,
                 (
                     drawing_number,
-        	        title,
+                    title,
                     revision,
                     file_path
                 )
             )
-            
+        
             conn.commit()
-
+        
             get_drawings.clear()
             get_revision_history.clear()
-            
-            st.success("Drawing Added")
-    
+        
+            st.success("Drawing Saved")
+        
             st.rerun()
     
         except psycopg2.IntegrityError:
