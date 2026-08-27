@@ -8,6 +8,7 @@ from utils import (
     get_revision_history,
     get_approvals
 )
+import psycopg2
 
 st.title("📐 Drawings Library")
 
@@ -549,8 +550,10 @@ with st.expander("➕ Add Drawing"):
     
             st.rerun()
     
-        except sqlite3.IntegrityError:
-    
+        except psycopg2.IntegrityError:
+        
+            conn.rollback()
+        
             st.error(
                 f"Drawing number '{drawing_number}' already exists."
             )
