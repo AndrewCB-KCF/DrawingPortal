@@ -6,7 +6,8 @@ from st_aggrid import JsCode
 from utils import (
     get_drawings,
     get_connection,
-    get_revision_history
+    get_revision_history,
+    get_approvals
 )
 import os
 from utils import DB_PATH
