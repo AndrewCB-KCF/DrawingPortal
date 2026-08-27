@@ -1,15 +1,11 @@
 import streamlit as st
 from utils import get_revision_history
-import os
-from utils import DB_PATH
-
-db_modified_time = os.path.getmtime(DB_PATH)
 
 st.title(
     "🕒 Revision History"
 )
 
-df = get_revision_history(db_modified_time)
+df = get_revision_history()
 
 search = st.text_input(
     "Search Drawing Number"
