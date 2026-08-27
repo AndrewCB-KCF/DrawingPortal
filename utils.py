@@ -3,6 +3,7 @@ import pandas as pd
 from pathlib import Path
 import streamlit as st
 import re
+import os
 
 DB_PATH = Path(__file__).parent / "SMARTDrawings Database-KCF-4DPWP74 - Copy.db"
 
@@ -68,8 +69,8 @@ def get_approvals():
     return df
 
 
-@st.cache_data(ttl=3600)
-def get_certifications():
+@st.cache_data
+def get_certifications(file_modified_time):
 
     df = pd.read_csv(
         "data/Certifications.csv"
