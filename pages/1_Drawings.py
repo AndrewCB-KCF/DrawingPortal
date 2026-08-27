@@ -316,11 +316,11 @@ if selected_rows is not None and len(selected_rows) > 0:
                 """
                 UPDATE drawings
                 SET
-                    drawing_number = ?,
-                    title = ?,
-                    revision = ?,
-                    file_path = ?
-                WHERE drawing_number = ?
+                    drawing_number = %s,
+                    title = %s,
+                    revision = %s,
+                    file_path = %s
+                WHERE drawing_number = %s
                 """,
                 (
                     new_drawing_number,
@@ -371,7 +371,7 @@ if selected_rows is not None and len(selected_rows) > 0:
                     """
                     UPDATE drawings
                     SET approval_status='Approved'
-                    WHERE drawing_number=?
+                    WHERE drawing_number=%s
                     """,
                     (drawing_number,)
                 )
@@ -426,7 +426,7 @@ if selected_rows is not None and len(selected_rows) > 0:
                     """
                     UPDATE drawings
                     SET approval_status='Rejected'
-                    WHERE drawing_number=?
+                    WHERE drawing_number=%s
                     """,
                     (drawing_number,)
                 )
