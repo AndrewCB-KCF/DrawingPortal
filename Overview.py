@@ -1,7 +1,7 @@
 import streamlit as st
 from utils import get_drawings
 import os
-import DB_PATH
+from utils import DB_PATH
 
 db_modified_time = os.path.getmtime(DB_PATH)
 
