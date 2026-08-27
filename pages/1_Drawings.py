@@ -337,7 +337,10 @@ if selected_rows is not None and len(selected_rows) > 0:
     
             conn.commit()
             conn.close()
-    
+
+            get_drawings.clear()
+            get_revision_history.clear()
+            
             st.success("Drawing Updated")
     
             st.rerun()
@@ -404,7 +407,11 @@ if selected_rows is not None and len(selected_rows) > 0:
     
                 conn.commit()
                 conn.close()
-    
+
+                get_drawings.clear()
+                get_revision_history.clear()
+                get_approvals.clear()
+                
                 st.success("Drawing Approved")
     
                 st.rerun()
@@ -455,7 +462,11 @@ if selected_rows is not None and len(selected_rows) > 0:
     
                 conn.commit()
                 conn.close()
-    
+
+                get_drawings.clear()
+                get_revision_history.clear()
+                get_approvals.clear()
+                
                 st.success("Drawing Rejected")
     
                 st.rerun()
@@ -516,7 +527,10 @@ with st.expander("➕ Add Drawing"):
             )
     
             conn.commit()
-    
+
+            get_drawings.clear()
+            get_revision_history.clear()
+            
             st.success("Drawing Added")
     
             st.rerun()
