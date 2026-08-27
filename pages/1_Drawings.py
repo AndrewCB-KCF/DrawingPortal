@@ -526,7 +526,27 @@ with st.expander("➕ Add Drawing"):
                     "Pending"
                 )
             )
-    
+
+            cursor.execute(
+                """
+                INSERT INTO revision_history
+                (
+                    drawing_number,
+        	        title,
+                    revision,
+                    file_path
+                )
+                VALUES (?, ?, ?, ?)
+                """,
+                (
+                    drawing_number,
+        	        title,
+                    revision,
+                    file_path
+                    )
+                )
+            )
+            
             conn.commit()
 
             get_drawings.clear()
