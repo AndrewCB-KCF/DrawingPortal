@@ -387,7 +387,7 @@ if selected_rows is not None and len(selected_rows) > 0:
                         comments,
                         approval_date
                     )
-                    VALUES (?, ?, ?, ?, ?, ?)
+                    VALUES (%s, %s, %s, %s, %s, %s)
                     """,
                     (
                         drawing_number,
@@ -442,7 +442,7 @@ if selected_rows is not None and len(selected_rows) > 0:
                         comments,
                         approval_date
                     )
-                    VALUES (?, ?, ?, ?, ?, ?)
+                    VALUES (%s, %s, %s, %s, %s, %s)
                     """,
                     (
                         drawing_number,
@@ -511,7 +511,7 @@ with st.expander("➕ Add Drawing"):
                     file_path,
                     approval_status
                 )
-                VALUES (?, ?, ?, ?, ?)
+                VALUES (%s, %s, %s, %s, %s)
                 """,
                 (
                     drawing_number,
@@ -531,7 +531,7 @@ with st.expander("➕ Add Drawing"):
                     revision,
                     file_path
                 )
-                VALUES (?, ?, ?, ?)
+                VALUES (%s, %s, %s, %s)
                 """,
                 (
                     drawing_number,
