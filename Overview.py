@@ -1,9 +1,5 @@
 import streamlit as st
 from utils import get_drawings
-import os
-from utils import DB_PATH
-
-db_modified_time = os.path.getmtime(DB_PATH)
 
 st.set_page_config(
     page_title="Engineering Drawing Portal",
@@ -13,7 +9,7 @@ st.set_page_config(
 
 st.title("📐 Engineering Drawing Portal")
 
-drawings = get_drawings(db_modified_time)
+drawings = get_drawings()
 
 pending = len(
     drawings[
