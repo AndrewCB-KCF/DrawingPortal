@@ -2,13 +2,19 @@ import streamlit as st
 from st_aggrid import AgGrid, GridOptionsBuilder, GridUpdateMode
 from utils import get_certifications
 import pandas as pd
+import os
 
 # -----------------------------
 # Load Data
 # -----------------------------
 
 with st.spinner("Loading certifications..."):
-    df = get_certifications()
+
+    csv_path = "data/Certifications.csv"
+
+    df = get_certifications(
+        os.path.getmtime(csv_path)
+    )
 
 st.title("🎓 Certifications")
 
