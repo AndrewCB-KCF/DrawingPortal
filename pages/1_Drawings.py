@@ -1,5 +1,4 @@
 import streamlit as st
-import sqlite3
 from datetime import datetime
 from st_aggrid import AgGrid, GridOptionsBuilder
 from st_aggrid import JsCode
@@ -9,16 +8,11 @@ from utils import (
     get_revision_history,
     get_approvals
 )
-import os
-from utils import DB_PATH
-
-db_modified_time = os.path.getmtime(DB_PATH)
 
 st.title("📐 Drawings Library")
 
-db_modified_time = os.path.getmtime(DB_PATH)
 
-df = get_drawings(db_modified_time)
+df = get_drawings()
 
 if "search" not in st.session_state:
     st.session_state.search = ""
@@ -60,8 +54,8 @@ with col3:
         st.session_state.clear_filters = True
         st.rerun()
 
-df = get_drawings(db_modified_time)
-revision_df = get_revision_history(db_modified_time)
+df = get_drawings()
+revision_df = get_revision_history()
 
 if search:
 
