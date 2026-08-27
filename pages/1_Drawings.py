@@ -8,6 +8,10 @@ from utils import (
     get_connection,
     get_revision_history
 )
+import os
+from utils import DB_PATH
+
+db_modified_time = os.path.getmtime(DB_PATH)
 
 st.title("📐 Drawings Library")
 
@@ -55,8 +59,8 @@ with col3:
         st.session_state.clear_filters = True
         st.rerun()
 
-df = get_drawings()
-revision_df = get_revision_history()
+df = get_drawings(db_modified_time)
+revision_df = get_revision_history(db_modified_time)
 
 if search:
 
