@@ -545,9 +545,3 @@ with st.expander("➕ Add Drawing"):
         finally:
     
             conn.close()
-
-        st.success(
-            "Drawing Added"
-        )
-
-        st.rerun()
