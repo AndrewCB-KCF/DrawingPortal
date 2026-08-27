@@ -12,8 +12,8 @@ def get_connection():
     return sqlite3.connect(DB_PATH)
 
 
-@st.cache_data(ttl=300)
-def get_drawings():
+@st.cache_data
+def get_drawings(db_modified_time):
 
     conn = get_connection()
 
@@ -31,8 +31,8 @@ def get_drawings():
     return df
 
 
-@st.cache_data(ttl=300)
-def get_revision_history():
+@st.cache_data
+def get_revision_history(db_modified_time):
 
     conn = get_connection()
 
@@ -50,8 +50,8 @@ def get_revision_history():
     return df
 
 
-@st.cache_data(ttl=300)
-def get_approvals():
+@st.cache_data
+def get_approvals(db_modified_time):
 
     conn = get_connection()
 
