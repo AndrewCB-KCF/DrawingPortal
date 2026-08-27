@@ -1,15 +1,11 @@
 import streamlit as st
 from utils import get_approvals
-import os
-from utils import DB_PATH
-
-db_modified_time = os.path.getmtime(DB_PATH)
 
 st.title(
     "✅ Approval History"
 )
 
-df = get_approvals(db_modified_time)
+df = get_approvals()
 
 search = st.text_input(
     "Search Reviewer or Drawing"
