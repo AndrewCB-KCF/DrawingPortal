@@ -482,33 +482,48 @@ with st.expander("➕ Add Drawing"):
     )
 
     if st.button("Save Drawing"):
-
+    
         conn = get_connection()
         cursor = conn.cursor()
-
-        cursor.execute(
-            """
-            INSERT INTO drawings
-            (
-                drawing_number,
-                title,
-                revision,
-                file_path,
-                approval_status
+    
+        try:
+    
+            cursor.execute(
+                """
+                INSERT INTO drawings
+                (
+                    drawing_number,
+                    title,
+                    revision,
+                    file_path,
+                    approval_status
+                )
+                VALUES (?, ?, ?, ?, ?)
+                """,
+                (
+                    drawing_number,
+                    title,
+                    revision,
+                    file_path,
+                    "Pending"
+                )
             )
-            VALUES (?, ?, ?, ?, ?)
-            """,
-            (
-                drawing_number,
-                title,
-                revision,
-                file_path,
-                "Pending"
+    
+            conn.commit()
+    
+            st.success("Drawing Added")
+    
+            st.rerun()
+    
+        except sqlite3.IntegrityError:
+    
+            st.error(
+                f"Drawing number '{drawing_number}' already exists."
             )
-        )
-
-        conn.commit()
-        conn.close()
+    
+        finally:
+    
+            conn.close()
 
         st.success(
             "Drawing Added"
