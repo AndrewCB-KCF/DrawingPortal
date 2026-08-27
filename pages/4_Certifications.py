@@ -8,9 +8,9 @@ import os
 # Load Data
 # -----------------------------
 
-with st.spinner("Loading certifications..."):
+csv_path = "data/Certifications.csv"
 
-    csv_path = "data/Certifications.csv"
+with st.spinner("Loading certifications..."):
 
     df = get_certifications(
         os.path.getmtime(csv_path)
