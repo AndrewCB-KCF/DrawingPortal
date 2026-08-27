@@ -1,19 +1,21 @@
-import sqlite3
 import pandas as pd
-from pathlib import Path
 import streamlit as st
 import re
-import os
-
-DB_PATH = Path(__file__).parent / "SMARTDrawings Database-KCF-4DPWP74 - Copy.db"
+import psycopg2
 
 
 def get_connection():
-    return sqlite3.connect(DB_PATH)
+    return psycopg2.connect(
+        host=st.secrets["SUPABASE_HOST"],
+        database=st.secrets["SUPABASE_DB"],
+        user=st.secrets["SUPABASE_USER"],
+        password=st.secrets["SUPABASE_PASSWORD"],
+        port=st.secrets["SUPABASE_PORT"]
+    )
 
 
-@st.cache_data
-def get_drawings(db_modified_time):
+@st.cache_data(ttl=60)
+def get_drawings():
 
     conn = get_connection()
 
@@ -31,8 +33,8 @@ def get_drawings(db_modified_time):
     return df
 
 
-@st.cache_data
-def get_revision_history(db_modified_time):
+@st.cache_data(ttl=60)
+def get_revision_history():
 
     conn = get_connection()
 
@@ -50,8 +52,8 @@ def get_revision_history(db_modified_time):
     return df
 
 
-@st.cache_data
-def get_approvals(db_modified_time):
+@st.cache_data(ttl=60)
+def get_approvals():
 
     conn = get_connection()
 
