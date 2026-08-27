@@ -11,7 +11,9 @@ from utils import (
 
 st.title("📐 Drawings Library")
 
-df = get_drawings()
+db_modified_time = os.path.getmtime(DB_PATH)
+
+df = get_drawings(db_modified_time)
 
 if "search" not in st.session_state:
     st.session_state.search = ""
