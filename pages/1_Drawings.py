@@ -261,19 +261,73 @@ if selected_rows is not None and len(selected_rows) > 0:
     
             for _, rev in selected_revisions.iterrows():
             
-                col1, col2 = st.columns([1, 3])
+                with st.expander(f"Revision {rev['revision']}"):
             
-                with col1:
-                    st.write(f"Rev {rev['revision']}")
+                    st.write(f"Title: {rev['title']}")
             
-                with col2:
+                    new_url = st.text_input(
+                        "SharePoint URL",
+                        value=rev["file_path"] if rev["file_path"] else "",
+                        key=f"url_{rev['drawing_number']}_{rev['revision']}"
+                    )
             
-                    if rev["file_path"]:
+                    col1, col2 = st.columns(2)
             
-                        st.link_button(
-                            "📂 Open",
-                            rev["file_path"]
-                        )
+                    with col1:
+                        if rev["file_path"]:
+                            st.link_button(
+                                "📂 Open",
+                                rev["file_path"]
+                            )
+            
+                    with col2:
+                        if st.button(
+                            "💾 Save URL",
+                            key=f"save_{rev['drawing_number']}_{rev['revision']}"
+                        ):
+            
+                            conn = get_connection()
+                            cursor = conn.cursor()
+            
+                            cursor.execute(
+                                """
+                                UPDATE revision_history
+                                SET file_path = %s
+                                WHERE drawing_number = %s
+                                AND revision = %s
+                                """,
+                                (
+                                    new_url,
+                                    rev["drawing_number"],
+                                    rev["revision"]
+                                )
+                            )
+            
+                            # If this is the current revision,
+                            # update drawings table too
+                            if rev["revision"] == record["revision"]:
+            
+                                cursor.execute(
+                                    """
+                                    UPDATE drawings
+                                    SET file_path = %s
+                                    WHERE drawing_number = %s
+                                    """,
+                                    (
+                                        new_url,
+                                        drawing_number
+                                    )
+                                )
+            
+                            conn.commit()
+                            conn.close()
+            
+                            get_drawings.clear()
+                            get_revision_history.clear()
+            
+                            st.success("URL Updated")
+            
+                            st.rerun()
     
         else:
     
