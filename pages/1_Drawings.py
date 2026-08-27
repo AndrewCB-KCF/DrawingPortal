@@ -543,7 +543,6 @@ with st.expander("➕ Add Drawing"):
         	        title,
                     revision,
                     file_path
-                    )
                 )
             )
             
