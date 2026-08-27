@@ -4,3 +4,4 @@ streamlit-aggrid
 msal
 requests
 openpyxl
+psycopg2-binary
