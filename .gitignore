@@ -1,0 +1,23 @@
+# Secrets
+.streamlit/secrets.toml
+*.env
+.env
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Databases / backups
+*.db
+*.sqlite
+*.sqlite3
+backup_*.db
+
+# Logs
+*.log
+
+# OS / editor
+.DS_Store
+.vscode/

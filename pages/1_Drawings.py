@@ -4,7 +4,7 @@ from st_aggrid import AgGrid, GridOptionsBuilder
 from st_aggrid import JsCode
 from utils import (
     get_drawings,
-    get_connection,
+    get_cursor,
     get_revision_history,
     get_approvals
 )
@@ -166,6 +166,7 @@ gb.configure_column(
                 this.eGui.innerText = '📂 Open';
                 this.eGui.setAttribute('href', params.value);
                 this.eGui.setAttribute('target', '_blank');
+                this.eGui.setAttribute('rel', 'noopener noreferrer');
             }
             getGui() {
                 return this.eGui;
@@ -286,42 +287,38 @@ if selected_rows is not None and len(selected_rows) > 0:
                             key=f"save_{rev['drawing_number']}_{rev['revision']}"
                         ):
             
-                            conn = get_connection()
-                            cursor = conn.cursor()
-            
-                            cursor.execute(
-                                """
-                                UPDATE revision_history
-                                SET file_path = %s
-                                WHERE drawing_number = %s
-                                AND revision = %s
-                                """,
-                                (
-                                    new_url,
-                                    rev["drawing_number"],
-                                    rev["revision"]
-                                )
-                            )
-            
-                            # If this is the current revision,
-                            # update drawings table too
-                            if rev["revision"] == record["revision"]:
-            
+                            with get_cursor(commit=True) as cursor:
+
                                 cursor.execute(
                                     """
-                                    UPDATE drawings
+                                    UPDATE revision_history
                                     SET file_path = %s
                                     WHERE drawing_number = %s
+                                    AND revision = %s
                                     """,
                                     (
                                         new_url,
-                                        drawing_number
+                                        rev["drawing_number"],
+                                        rev["revision"]
                                     )
                                 )
-            
-                            conn.commit()
-                            conn.close()
-            
+
+                                # If this is the current revision,
+                                # update drawings table too
+                                if rev["revision"] == record["revision"]:
+
+                                    cursor.execute(
+                                        """
+                                        UPDATE drawings
+                                        SET file_path = %s
+                                        WHERE drawing_number = %s
+                                        """,
+                                        (
+                                            new_url,
+                                            drawing_number
+                                        )
+                                    )
+
                             get_drawings.clear()
                             get_revision_history.clear()
             
@@ -363,30 +360,26 @@ if selected_rows is not None and len(selected_rows) > 0:
 
         if submitted:
     
-            conn = get_connection()
-            cursor = conn.cursor()
-    
-            cursor.execute(
-                """
-                UPDATE drawings
-                SET
-                    drawing_number = %s,
-                    title = %s,
-                    revision = %s,
-                    file_path = %s
-                WHERE drawing_number = %s
-                """,
-                (
-                    new_drawing_number,
-                    new_title,
-                    new_revision,
-                    new_file_path,
-                    drawing_number
+            with get_cursor(commit=True) as cursor:
+
+                cursor.execute(
+                    """
+                    UPDATE drawings
+                    SET
+                        drawing_number = %s,
+                        title = %s,
+                        revision = %s,
+                        file_path = %s
+                    WHERE drawing_number = %s
+                    """,
+                    (
+                        new_drawing_number,
+                        new_title,
+                        new_revision,
+                        new_file_path,
+                        drawing_number
+                    )
                 )
-            )
-    
-            conn.commit()
-            conn.close()
 
             get_drawings.clear()
             get_revision_history.clear()
@@ -418,50 +411,46 @@ if selected_rows is not None and len(selected_rows) > 0:
                 key=f"approve_{drawing_number}"
             ):
     
-                conn = get_connection()
-                cursor = conn.cursor()
-    
-                cursor.execute(
-                    """
-                    UPDATE drawings
-                    SET approval_status='Approved'
-                    WHERE drawing_number=%s
-                    """,
-                    (drawing_number,)
-                )
-    
-                cursor.execute(
-                    """
-                    INSERT INTO approvals
-                    (
-                        drawing_number,
-                        revision,
-                        reviewer,
-                        decision,
-                        comments,
-                        approval_date
+                with get_cursor(commit=True) as cursor:
+
+                    cursor.execute(
+                        """
+                        UPDATE drawings
+                        SET approval_status='Approved'
+                        WHERE drawing_number=%s
+                        """,
+                        (drawing_number,)
                     )
-                    VALUES (%s, %s, %s, %s, %s, %s)
-                    """,
-                    (
-                        drawing_number,
-                        record["revision"],
-                        reviewer,
-                        "Approved",
-                        comments,
-                        datetime.now().strftime(
-                            "%Y-%m-%d %H:%M:%S"
+
+                    cursor.execute(
+                        """
+                        INSERT INTO approvals
+                        (
+                            drawing_number,
+                            revision,
+                            reviewer,
+                            decision,
+                            comments,
+                            approval_date
+                        )
+                        VALUES (%s, %s, %s, %s, %s, %s)
+                        """,
+                        (
+                            drawing_number,
+                            record["revision"],
+                            reviewer,
+                            "Approved",
+                            comments,
+                            datetime.now().strftime(
+                                "%Y-%m-%d %H:%M:%S"
+                            )
                         )
                     )
-                )
-    
-                conn.commit()
-                conn.close()
 
                 get_drawings.clear()
                 get_revision_history.clear()
                 get_approvals.clear()
-                
+
                 st.success("Drawing Approved")
     
                 st.rerun()
@@ -473,50 +462,46 @@ if selected_rows is not None and len(selected_rows) > 0:
                 key=f"reject_{drawing_number}"
             ):
     
-                conn = get_connection()
-                cursor = conn.cursor()
-    
-                cursor.execute(
-                    """
-                    UPDATE drawings
-                    SET approval_status='Rejected'
-                    WHERE drawing_number=%s
-                    """,
-                    (drawing_number,)
-                )
-    
-                cursor.execute(
-                    """
-                    INSERT INTO approvals
-                    (
-                        drawing_number,
-                        revision,
-                        reviewer,
-                        decision,
-                        comments,
-                        approval_date
+                with get_cursor(commit=True) as cursor:
+
+                    cursor.execute(
+                        """
+                        UPDATE drawings
+                        SET approval_status='Rejected'
+                        WHERE drawing_number=%s
+                        """,
+                        (drawing_number,)
                     )
-                    VALUES (%s, %s, %s, %s, %s, %s)
-                    """,
-                    (
-                        drawing_number,
-                        record["revision"],
-                        reviewer,
-                        "Rejected",
-                        comments,
-                        datetime.now().strftime(
-                            "%Y-%m-%d %H:%M:%S"
+
+                    cursor.execute(
+                        """
+                        INSERT INTO approvals
+                        (
+                            drawing_number,
+                            revision,
+                            reviewer,
+                            decision,
+                            comments,
+                            approval_date
+                        )
+                        VALUES (%s, %s, %s, %s, %s, %s)
+                        """,
+                        (
+                            drawing_number,
+                            record["revision"],
+                            reviewer,
+                            "Rejected",
+                            comments,
+                            datetime.now().strftime(
+                                "%Y-%m-%d %H:%M:%S"
+                            )
                         )
                     )
-                )
-    
-                conn.commit()
-                conn.close()
 
                 get_drawings.clear()
                 get_revision_history.clear()
                 get_approvals.clear()
-                
+
                 st.success("Drawing Rejected")
     
                 st.rerun()
@@ -549,106 +534,97 @@ with st.expander("➕ Add Drawing"):
     )
 
     if st.button("Save Drawing"):
-    
-        conn = get_connection()
-        cursor = conn.cursor()
-    
+
         try:
-        
-            # Check if drawing already exists
-            cursor.execute(
-                """
-                SELECT drawing_number
-                FROM drawings
-                WHERE drawing_number = %s
-                """,
-                (drawing_number,)
-            )
-        
-            existing = cursor.fetchone()
-        
-            if existing:
-        
-                # Update current revision in drawings table
+
+            with get_cursor(commit=True) as cursor:
+
+                # Check if drawing already exists
                 cursor.execute(
                     """
-                    UPDATE drawings
-                    SET
-                        title = %s,
-                        revision = %s,
-                        file_path = %s,
-                        approval_status = 'Pending'
+                    SELECT drawing_number
+                    FROM drawings
                     WHERE drawing_number = %s
                     """,
-                    (
-                        title,
-                        revision,
-                        file_path,
-                        drawing_number
-                    )
+                    (drawing_number,)
                 )
-        
-            else:
-        
-                # Brand new drawing
+
+                existing = cursor.fetchone()
+
+                if existing:
+
+                    # Update current revision in drawings table
+                    cursor.execute(
+                        """
+                        UPDATE drawings
+                        SET
+                            title = %s,
+                            revision = %s,
+                            file_path = %s,
+                            approval_status = 'Pending'
+                        WHERE drawing_number = %s
+                        """,
+                        (
+                            title,
+                            revision,
+                            file_path,
+                            drawing_number
+                        )
+                    )
+
+                else:
+
+                    # Brand new drawing
+                    cursor.execute(
+                        """
+                        INSERT INTO drawings
+                        (
+                            drawing_number,
+                            title,
+                            revision,
+                            file_path,
+                            approval_status
+                        )
+                        VALUES (%s, %s, %s, %s, %s)
+                        """,
+                        (
+                            drawing_number,
+                            title,
+                            revision,
+                            file_path,
+                            "Pending"
+                        )
+                    )
+
+                # Always add a revision history record
                 cursor.execute(
                     """
-                    INSERT INTO drawings
+                    INSERT INTO revision_history
                     (
                         drawing_number,
                         title,
                         revision,
-                        file_path,
-                        approval_status
+                        file_path
                     )
-                    VALUES (%s, %s, %s, %s, %s)
+                    VALUES (%s, %s, %s, %s)
                     """,
                     (
                         drawing_number,
                         title,
                         revision,
-                        file_path,
-                        "Pending"
+                        file_path
                     )
                 )
-        
-            # Always add a revision history record
-            cursor.execute(
-                """
-                INSERT INTO revision_history
-                (
-                    drawing_number,
-                    title,
-                    revision,
-                    file_path
-                )
-                VALUES (%s, %s, %s, %s)
-                """,
-                (
-                    drawing_number,
-                    title,
-                    revision,
-                    file_path
-                )
-            )
-        
-            conn.commit()
-        
+
             get_drawings.clear()
             get_revision_history.clear()
-        
+
             st.success("Drawing Saved")
-        
+
             st.rerun()
-    
+
         except psycopg2.IntegrityError:
-        
-            conn.rollback()
-        
+
             st.error(
                 f"Drawing number '{drawing_number}' already exists."
             )
-    
-        finally:
-    
-            conn.close()

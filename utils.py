@@ -1,11 +1,15 @@
 import pandas as pd
 import streamlit as st
 import re
-import psycopg2
+from contextlib import contextmanager
+from psycopg2 import pool
 
 
-def get_connection():
-    return psycopg2.connect(
+@st.cache_resource
+def get_pool():
+    return pool.ThreadedConnectionPool(
+        1,
+        10,
         host=st.secrets["SUPABASE_HOST"],
         database=st.secrets["SUPABASE_DB"],
         user=st.secrets["SUPABASE_USER"],
@@ -14,61 +18,73 @@ def get_connection():
     )
 
 
+@contextmanager
+def get_conn():
+    conn = get_pool().getconn()
+    try:
+        yield conn
+    except Exception:
+        conn.rollback()
+        raise
+    finally:
+        get_pool().putconn(conn)
+
+
+@contextmanager
+def get_cursor(commit=False):
+    with get_conn() as conn:
+        cursor = conn.cursor()
+        try:
+            yield cursor
+            if commit:
+                conn.commit()
+        finally:
+            cursor.close()
+
+
 @st.cache_data(ttl=60)
 def get_drawings():
 
-    conn = get_connection()
+    with get_conn() as conn:
 
-    df = pd.read_sql(
-        """
-        SELECT *
-        FROM drawings
-        ORDER BY drawing_number
-        """,
-        conn
-    )
-
-    conn.close()
-
-    return df
+        return pd.read_sql(
+            """
+            SELECT *
+            FROM drawings
+            ORDER BY drawing_number
+            """,
+            conn
+        )
 
 
 @st.cache_data(ttl=60)
 def get_revision_history():
 
-    conn = get_connection()
+    with get_conn() as conn:
 
-    df = pd.read_sql(
-        """
-        SELECT *
-        FROM revision_history
-        ORDER BY created_date DESC
-        """,
-        conn
-    )
-
-    conn.close()
-
-    return df
+        return pd.read_sql(
+            """
+            SELECT *
+            FROM revision_history
+            ORDER BY created_date DESC
+            """,
+            conn
+        )
 
 
 @st.cache_data(ttl=60)
 def get_approvals():
 
-    conn = get_connection()
+    with get_conn() as conn:
 
-    df = pd.read_sql(
-        """
-        SELECT *
-        FROM approvals
-        ORDER BY approval_date DESC
-        """,
-        conn
-    )
-
-    conn.close()
-
-    return df
+        return pd.read_sql(
+            """
+            SELECT *
+            FROM approvals
+            ORDER BY approval_date DESC
+            """,
+            conn
+        )
 
 
 @st.cache_data
