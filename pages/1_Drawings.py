@@ -246,7 +246,7 @@ if selected_rows is not None and len(selected_rows) > 0:
             st.link_button(
                 f"📂 Open Revision {record['revision']}",
                 record["file_path"],
-                use_container_width=True
+                width="stretch"
             )
     
     with revisions_tab:

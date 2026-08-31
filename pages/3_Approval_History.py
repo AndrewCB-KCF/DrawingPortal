@@ -30,5 +30,5 @@ if search:
 
 st.dataframe(
     df,
-    use_container_width=True
+    width="stretch"
 )

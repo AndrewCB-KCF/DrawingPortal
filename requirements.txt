@@ -5,3 +5,4 @@ msal
 requests
 openpyxl
 psycopg2-binary
+sqlalchemy

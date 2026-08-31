@@ -1,5 +1,5 @@
 import streamlit as st
-from st_aggrid import AgGrid, GridOptionsBuilder, GridUpdateMode
+from st_aggrid import AgGrid, GridOptionsBuilder
 from utils import get_certifications
 import pandas as pd
 import os
@@ -25,7 +25,7 @@ st.info(
 st.link_button(
     "📂 Open SharePoint Certifications List",
     "https://kcftech.sharepoint.com/sites/HardwareDepartment/Lists/Certification%20Tracker/AllItems.aspx",
-    use_container_width=True,
+    width="stretch",
 )
 
 # -----------------------------
@@ -226,7 +226,7 @@ grid_options = gb.build()
 grid_response = AgGrid(
     grid_df,
     gridOptions=grid_options,
-    update_mode=GridUpdateMode.SELECTION_CHANGED,
+    update_on=["selectionChanged"],
     height=500,
     fit_columns_on_grid_load=True,
 )

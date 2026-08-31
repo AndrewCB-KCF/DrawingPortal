@@ -3,6 +3,8 @@ import streamlit as st
 import re
 from contextlib import contextmanager
 from psycopg2 import pool
+from sqlalchemy import create_engine
+from sqlalchemy.engine import URL
 
 
 @st.cache_resource
@@ -16,6 +18,19 @@ def get_pool():
         password=st.secrets["SUPABASE_PASSWORD"],
         port=st.secrets["SUPABASE_PORT"]
     )
+
+
+@st.cache_resource
+def get_engine():
+    url = URL.create(
+        "postgresql+psycopg2",
+        username=st.secrets["SUPABASE_USER"],
+        password=st.secrets["SUPABASE_PASSWORD"],
+        host=st.secrets["SUPABASE_HOST"],
+        port=int(st.secrets["SUPABASE_PORT"]),
+        database=st.secrets["SUPABASE_DB"]
+    )
+    return create_engine(url)
 
 
 @contextmanager
@@ -45,46 +60,40 @@ def get_cursor(commit=False):
 @st.cache_data(ttl=60)
 def get_drawings():
 
-    with get_conn() as conn:
-
-        return pd.read_sql(
-            """
-            SELECT *
-            FROM drawings
-            ORDER BY drawing_number
-            """,
-            conn
-        )
+    return pd.read_sql(
+        """
+        SELECT *
+        FROM drawings
+        ORDER BY drawing_number
+        """,
+        get_engine()
+    )
 
 
 @st.cache_data(ttl=60)
 def get_revision_history():
 
-    with get_conn() as conn:
-
-        return pd.read_sql(
-            """
-            SELECT *
-            FROM revision_history
-            ORDER BY created_date DESC
-            """,
-            conn
-        )
+    return pd.read_sql(
+        """
+        SELECT *
+        FROM revision_history
+        ORDER BY created_date DESC
+        """,
+        get_engine()
+    )
 
 
 @st.cache_data(ttl=60)
 def get_approvals():
 
-    with get_conn() as conn:
-
-        return pd.read_sql(
-            """
-            SELECT *
-            FROM approvals
-            ORDER BY approval_date DESC
-            """,
-            conn
-        )
+    return pd.read_sql(
+        """
+        SELECT *
+        FROM approvals
+        ORDER BY approval_date DESC
+        """,
+        get_engine()
+    )
 
 
 @st.cache_data

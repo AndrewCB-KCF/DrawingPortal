@@ -25,7 +25,7 @@ if search:
 
 st.dataframe(
     df,
-    use_container_width=True
+    width="stretch"
 )
 
 if not df.empty:
@@ -46,5 +46,5 @@ if not df.empty:
 
     st.dataframe(
         filtered,
-        use_container_width=True
+        width="stretch"
     )
