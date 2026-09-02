@@ -108,12 +108,19 @@ def get_certifications(file_modified_time):
         if pd.isna(html):
             return ""
 
+        html = str(html)
+
         reports = re.findall(
             r'title="([^"]+)"',
-            str(html)
+            html
         )
 
-        return ", ".join(reports)
+        if reports:
+            return ", ".join(reports)
+
+        # No hyperlinks present - fall back to the plain text content
+        text = re.sub(r'<[^>]+>', ' ', html)
+        return re.sub(r'\s+', ' ', text).strip()
 
     if "Report Number" in df.columns:
         df["Report Number"] = (
