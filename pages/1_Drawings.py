@@ -26,6 +26,13 @@ if st.session_state.get("clear_filters", False):
     st.session_state["status_filter"] = "All"
     st.session_state.clear_filters = False
 
+if st.session_state.get("clear_add_drawing_form", False):
+    st.session_state["add_drawing_number"] = ""
+    st.session_state["add_title"] = ""
+    st.session_state["add_revision"] = "A"
+    st.session_state["add_file_path"] = ""
+    st.session_state["clear_add_drawing_form"] = False
+
 col1, col2, col3 = st.columns([4, 2, 1])
 
 
@@ -620,6 +627,8 @@ with st.expander("➕ Add Drawing"):
             get_revision_history.clear()
 
             st.success("Drawing Saved")
+
+            st.session_state["clear_add_drawing_form"] = True
 
             st.rerun()
 
